@@ -1,9 +1,5 @@
-import React from 'react'
-
 const Square = () => {
-  return (
-    <div>Square</div>
-  )
-}
+  return <button className="square"></button>;
+};
 
-export default Square
+export default Square;
