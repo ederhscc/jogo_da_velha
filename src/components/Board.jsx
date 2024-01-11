@@ -5,8 +5,7 @@ const Board = () => {
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [isNext, setIsNext] = useState(true);
   const winner = calculateWinner(squares);
-
-  const [aiIsThinking, setIsThinking] = useState(false);
+  const [aiIsThinking, setAiIsThinking] = useState(false);
 
   const handleClick = (i) => {
     if (squares[i] || winner || aiIsThinking) return;
@@ -24,6 +23,18 @@ const Board = () => {
     setSquares(Array(9).fill(null));
     setIsNext(true);
   };
+
+  useEffect(() => {
+    if (!isNext && !winner) {
+      setAiIsThinking(true);
+
+      setTimeout(() => {
+        aiMove(squares, setSquares, setIsNext);
+
+        setAiIsThinking(false);
+      }, 1000);
+    }
+  }, [isNext, squares, winner]);
 
   return (
     <div>
@@ -78,6 +89,27 @@ const calculateWinner = (squares) => {
     }
   }
   return null;
+};
+
+const aiMove = (squares, setSquares, setIsNext) => {
+  let move = null;
+
+  for (let i = 0; i < squares.length; i++) {
+    if (!squares[i]) {
+      move = i;
+      break;
+    }
+  }
+
+  if (move !== null) {
+    const newSquares = squares.slice();
+
+    newSquares[move] = "O";
+
+    setSquares(newSquares);
+
+    setIsNext(true);
+  }
 };
 
 export default Board;
